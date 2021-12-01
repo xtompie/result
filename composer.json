@@ -1,0 +1,21 @@
+{
+    "name": "xtompie/result",
+    "type": "library",
+    "description": "Functional handling failures, input errors",
+    "keywords": ["error", "result", "fail"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomasz Pielczyk",
+            "email": "tomasz.pielczyk@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Xtompie\\Result\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=8.0"
+    }
+}
