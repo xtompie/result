@@ -32,7 +32,7 @@ class Error
         return $this->space;
     }
 
-    public function withSpace(string $space): static
+    public function withSpace(?string $space): static
     {
         $new = clone $this;
         $new->space = $space;
