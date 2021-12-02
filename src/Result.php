@@ -11,14 +11,14 @@ class Result
         return new static(true, null, ErrorCollection::ofEmpty());
     }
 
+    public static function ofValue(mixed $value): static
+    {
+        return new static(true, $value, ErrorCollection::ofEmpty());
+    }
+
     public static function ofFail(): static
     {
         return new static(false, null, ErrorCollection::ofEmpty());
-    }
-
-    public static function ofValue(mixed $value): static
-    {
-        return new static(false, $value, ErrorCollection::ofEmpty());
     }
 
     public static function ofError(Error $error): static
