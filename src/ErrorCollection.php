@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Xtompie\Result;
 
-class ErrorCollection
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
+use Traversable;
+
+class ErrorCollection implements IteratorAggregate, Countable
 {
     public static function ofEmpty(): static
     {
@@ -16,10 +21,10 @@ class ErrorCollection
         return new static([$error]);
     }
 
-    public static function ofErrorMsg(?string $message = null, ?string $code = null, ?string $key = null): static
+    public static function ofErrorMsg(?string $message = null, ?string $key = null, ?string $space = null): static
     {
         return new static([
-            Error::of($message, $code, $key)
+            Error::of($message, $key, $space)
         ]);
     }
 
@@ -63,6 +68,11 @@ class ErrorCollection
         return new static(array_map($callback, $this->collection));
     }
 
+    public function mapToArray(callable $callback): array
+    {
+        return array_map($callback, $this->collection);
+    }
+
     public function filter(callable $callback): static
     {
         return new static(array_filter($this->collection, $callback));
@@ -77,6 +87,11 @@ class ErrorCollection
     public function withPrefix(string $prefix)
     {
         return $this->map(fn (Error $error) => $error->withPrefix($prefix));
+    }
+
+    public function withSpace(string $space)
+    {
+        return $this->map(fn (Error $error) => $error->withSpace($space));
     }
 
     public function filterByPrefix(string $prefix): static
@@ -99,5 +114,15 @@ class ErrorCollection
     public function addMsg(?string $message, ?string $key, ?string $space): static
     {
         return $this->merge(ErrorCollection::ofErrorMsg($message, $key, $space));
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->collection);
+    }
+
+    public function count(): int
+    {
+        return count($this->collection);
     }
 }

@@ -51,6 +51,11 @@ class Error
         return $prefix === substr($this->space(), 0, strlen($prefix));
     }
 
+    public function hasSpace(): bool
+    {
+        return $this->space !== null;
+    }
+
     public function hashCode(): string
     {
         return sha1(serialize([
