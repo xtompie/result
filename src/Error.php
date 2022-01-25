@@ -48,12 +48,16 @@ class Error
 
     public function hasPrefix(string $prefix): bool
     {
+        if ($this->space() === null) {
+            return false;
+        }
+
         return $prefix === substr($this->space(), 0, strlen($prefix));
     }
 
-    public function hasSpace(): bool
+    public function hasSpace(?string $space): bool
     {
-        return $this->space !== null;
+        return $this->space === $space;
     }
 
     public function hashCode(): string

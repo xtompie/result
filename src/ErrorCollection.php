@@ -99,6 +99,11 @@ class ErrorCollection implements IteratorAggregate, Countable
         return $this->filter(fn(Error $error) => $error->hasPrefix($prefix));
     }
 
+    public function filterBySpace(?string $space): static
+    {
+        return $this->filter(fn(Error $error) => $error->hasSpace($space));
+    }
+
     public function unique(): static
     {
         $unique = [];
