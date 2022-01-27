@@ -16,6 +16,11 @@ class ErrorCollection implements IteratorAggregate, Countable
         return new static([]);
     }
 
+    public static function ofErrors(array $errors): static
+    {
+        return new static($errors);
+    }
+
     public static function ofError(Error $error): static
     {
         return new static([$error]);
