@@ -51,3 +51,83 @@ Result::ofCombine(Result ...$results):
 // when fail errors are merged
 // when success, first value is used
 ```
+
+## Usage example
+
+
+```php
+namespace App\User\Application\Service\CreateUser;
+
+use Xtompie\Result\Result;
+
+class CreateUserResult extends Result
+{
+    public static function ofUserId(strign $userId): static
+    {
+        return parent::ofValue($userId);
+    }
+
+    public function userId(): string
+    {
+        return $this->value();
+    }
+}
+
+class CreateUserService
+{
+    public function __invoke(string $email): Result
+    {
+        if (strlen($email) === 0) {
+            return Result::ofErrorMsg('Email required', 'required', 'email');
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return Result::ofErrorMsg('Invalid email', 'email', 'email');
+        }
+
+        if ($this->dao->exists('user', ['email' => $email])) {
+            return Result::ofErrorMsg('Email exists', 'exists', 'email');
+        }
+
+        $id = $this->dao->insert('user', ['email' => $email]);
+
+        return Result::ofUserId($id);
+    }
+}
+
+namespace App\User\UI\Controller;
+
+use App\User\Application\Service\CreateUser\CreateUserService;
+use App\User\UI\Request\Request;
+
+class ApiUsersPostController
+{
+    public function __construct(
+        protected CreateUserService $createUserService,
+        protected Request $request,
+    ) {}
+
+    public function __invoke()
+    {
+        $result = ($this->createUserService)((string)$this->request->input('email'));
+        if ($result->fail()) {
+            return [
+                'success' => false,
+                'error' => [
+                    'msg' => $result->errors()->first()?->message(),
+                    'key' => $result->errors()->first()?->key(),
+                    'space' => $result->errors()->first()?->space(),
+                ],
+            ];
+        }
+
+        return [
+            'success' => true,
+            'body' => [
+                'id' => $result->userId(),
+            ],
+        ];
+    }
+}
+
+```
