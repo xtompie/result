@@ -33,6 +33,16 @@ class ErrorCollection implements IteratorAggregate, Countable
         ]);
     }
 
+    public static function fromPrimitive(array $primitive): static
+    {
+        return new static(
+            array_map(
+                fn (array $error) => Error::fromPrimitive($error),
+                $primitive
+            )
+        );
+    }
+
     public function __construct(
         protected array $collection,
     ) {}
@@ -43,6 +53,14 @@ class ErrorCollection implements IteratorAggregate, Countable
     public function toArray(): array
     {
         return $this->collection;
+    }
+
+    public function toPrimitive(): array
+    {
+        return array_map(
+            fn (Error $error) => $error->toPrimitive(),
+            $this->collection
+        );
     }
 
     public function any(): bool

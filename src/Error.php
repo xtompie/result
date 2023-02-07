@@ -6,6 +6,15 @@ namespace Xtompie\Result;
 
 class Error
 {
+    public static function fromPrimitive(array $primitive): static
+    {
+        return new static(
+            message: $primitive['message'],
+            key: $primitive['key'],
+            space: $primitive['space'],
+        );
+    }
+
     public static function of(?string $message = null, ?string $key = null, ?string $space = null): static
     {
         return new static($message, $key, $space);
@@ -16,6 +25,15 @@ class Error
         protected ?string $key = null,
         protected ?string $space = null,
     ) {}
+
+    public function toPrimitive(): array
+    {
+        return [
+            'message' => $this->message,
+            'key' => $this->key,
+            'space' => $this->space,
+        ];
+    }
 
     public function message(): ?string
     {
