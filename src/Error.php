@@ -57,10 +57,10 @@ class Error
         return $new;
     }
 
-    public function withPrefix(string $prefix): static
+    public function withPrefix(string $prefix, string $glue = ''): static
     {
         $new = clone $this;
-        $new->space = $prefix . $this->space;
+        $new->space = $prefix . ($this->space ? $glue : '') . $this->space;
         return $new;
     }
 

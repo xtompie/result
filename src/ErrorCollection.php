@@ -107,9 +107,9 @@ class ErrorCollection implements IteratorAggregate, Countable
         return $this;
     }
 
-    public function withPrefix(string $prefix)
+    public function withPrefix(string $prefix, string $glue = '')
     {
-        return $this->map(fn (Error $error) => $error->withPrefix($prefix));
+        return $this->map(fn (Error $error) => $error->withPrefix($prefix, $glue));
     }
 
     public function withSpace(string $space)
