@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Xtompie\Result;
 
-class Result
+use JsonSerializable;
+
+class Result implements JsonSerializable
 {
     public static function ofSuccess(): static
     {
@@ -109,5 +111,14 @@ class Result
     public function map(callable $callback): static
     {
         return $callback($this);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'success' => $this->success,
+            'value' => $this->value,
+            'errors' => $this->errors,
+        ];
     }
 }

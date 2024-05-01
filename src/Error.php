@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Xtompie\Result;
 
-class Error
+use JsonSerializable;
+
+class Error implements JsonSerializable
 {
     public static function fromPrimitive(array $primitive): static
     {
@@ -89,5 +91,10 @@ class Error
     public function equals(Error $error): bool
     {
         return $this->key === $error->key && $this->space === $error->space;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toPrimitive();
     }
 }

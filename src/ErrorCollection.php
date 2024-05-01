@@ -7,9 +7,10 @@ namespace Xtompie\Result;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use JsonSerializable;
 use Traversable;
 
-class ErrorCollection implements IteratorAggregate, Countable
+class ErrorCollection implements IteratorAggregate, Countable, JsonSerializable
 {
     public static function ofEmpty(): static
     {
@@ -152,5 +153,10 @@ class ErrorCollection implements IteratorAggregate, Countable
     public function count(): int
     {
         return count($this->collection);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->collection;
     }
 }
