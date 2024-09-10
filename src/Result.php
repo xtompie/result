@@ -33,6 +33,11 @@ class Result implements JsonSerializable
         return new static(false, null, $errors);
     }
 
+    public static function byErrors(ErrorCollection $errors): static
+    {
+        return $errors->any() ? static::ofErrors($errors) : static::ofSuccess();
+    }
+
     public static function ofErrorMsg(?string $message, ?string $key = null, ?string $space = null): static
     {
         return new static(false, null, ErrorCollection::ofErrorMsg($message, $key, $space));
