@@ -10,6 +10,9 @@ use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<int, Error>
+ */
 class ErrorCollection implements IteratorAggregate, Countable, JsonSerializable
 {
     public static function ofEmpty(): static
@@ -145,6 +148,9 @@ class ErrorCollection implements IteratorAggregate, Countable, JsonSerializable
         return $this->merge(ErrorCollection::ofErrorMsg($message, $key, $space));
     }
 
+    /**
+     * @return Traversable<int, Error>
+     */
     public function getIterator(): Traversable
     {
         return new ArrayIterator($this->collection);
